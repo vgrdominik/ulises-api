@@ -22,7 +22,7 @@ class Taxon extends BaseDomain implements AvailabilityInterface, SortableInterfa
         'is_available' => ['required', 'boolean'],
         'details' => ['required', 'string', 'min:8', 'max:2000'],
         'channel_id' => ['required', 'integer', 'exists:channels,id'],
-        'parent_taxon_id' => ['required', 'integer', 'exists:taxons,id'],
+        'parent_taxon_id' => ['nullable', 'integer', 'exists:taxons,id'],
         'order' => ['required', 'string', 'min:1', 'max:25'],
         'photo' => ['required', 'string', 'min:4', 'max:255'],
     ];

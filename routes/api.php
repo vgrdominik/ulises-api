@@ -24,7 +24,7 @@ Route::namespace('\\App\\Modules\\')->middleware('auth:airlock')->group(function
         Route::get('eventSummary', 'Api@eventSummary');
         Route::resource('event', 'Api');
     });
-    Route::namespace('Om\\Product\\Infrastructure\\Controller')->group(function () {
+    Route::namespace('Ulises\\Product\\Infrastructure\\Controller')->group(function () {
         Route::get('productSummary', 'Api@productSummary');
         Route::resource('product', 'Api');
         Route::get('complementSummary', 'ApiComplement@complementSummary');
@@ -32,18 +32,18 @@ Route::namespace('\\App\\Modules\\')->middleware('auth:airlock')->group(function
         Route::get('complementTaxonSummary', 'ApiComplementTaxon@complementTaxonSummary');
         Route::resource('complementTaxon', 'ApiComplementTaxon');
     });
-    Route::namespace('Om\\Channel\\Infrastructure\\Controller')->group(function () {
+    Route::namespace('Ulises\\Channel\\Infrastructure\\Controller')->group(function () {
         Route::resource('channel', 'Api');
     });
-    Route::namespace('Om\\Vendor\\Infrastructure\\Controller')->group(function () {
+    Route::namespace('Ulises\\Vendor\\Infrastructure\\Controller')->group(function () {
         Route::resource('vendor', 'Api');
     });
-    Route::namespace('Om\\Taxon\\Infrastructure\\Controller')->group(function () {
+    Route::namespace('Ulises\\Taxon\\Infrastructure\\Controller')->group(function () {
         Route::resource('taxon', 'Api');
     });
 });
 
 // Public Om routes
-Route::namespace('\\App\\Modules\\Om\\')->group(function () {
+Route::namespace('\\App\\Modules\\Ulises\\')->group(function () {
     // Nothing at the moment
 });

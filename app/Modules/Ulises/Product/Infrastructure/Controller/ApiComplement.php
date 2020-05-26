@@ -14,6 +14,24 @@ class ApiComplement extends ResourceController
         return 'Ulises\\Complement';
     }
 
+    protected function getModelClass(): string
+    {
+        $modelName = $this->getModelName();
+        $lastModelName = explode('\\', $modelName);
+        $lastModelName = array_pop($lastModelName);
+
+        return '\\App\\Modules\\Ulises\\Product\\Domain\\' . $lastModelName;
+    }
+
+    protected function getTransformerClass(): string
+    {
+        $modelName = $this->getModelName();
+        $lastModelName = explode('\\', $modelName);
+        $lastModelName = array_pop($lastModelName);
+
+        return '\\App\\Modules\\Ulises\\Product\\Transformers\\' . $lastModelName;
+    }
+
     /**
      * Display a listing of summary resource.
      *

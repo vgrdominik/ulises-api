@@ -17,7 +17,7 @@ class CreateTaxonsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('creator_id')->index();
             $table->unsignedBigInteger('channel_id')->index();
-            $table->unsignedBigInteger('parent_taxon_id')->index();
+            $table->unsignedBigInteger('parent_taxon_id')->index()->nullable();
             $table->string('description');
             $table->string('short_description');
             $table->text('details');

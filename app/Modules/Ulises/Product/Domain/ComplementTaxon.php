@@ -2,10 +2,6 @@
 namespace App\Modules\Ulises\Product\Domain;
 
 use App\Modules\Base\Domain\BaseDomain;
-use App\Modules\Base\Traits\Photo;
-use App\Modules\Base\Traits\Availability;
-use App\Modules\Base\Traits\AvailabilityInterface;
-use App\Modules\Base\Traits\PhotoInterface;
 use App\Modules\Base\Traits\Sortable;
 use App\Modules\Base\Traits\SortableInterface;
 
