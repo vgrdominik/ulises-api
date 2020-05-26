@@ -18,6 +18,7 @@ class Product extends BaseDomain implements AvailabilityInterface, SortableInter
     const VALIDATION_COTNEXT = [
         'creator_id' => ['required', 'integer', 'exists:users,id'],
         'vendor_id' => ['required', 'integer', 'exists:vendors,id'],
+        'taxon_id' => ['required', 'integer', 'exists:vendors,id'],
         'description' => ['required', 'string', 'min:4', 'max:255'],
         'short_description' => ['required', 'string', 'max:255'],
         'details' => ['required', 'string', 'max:2000'],
@@ -61,6 +62,7 @@ class Product extends BaseDomain implements AvailabilityInterface, SortableInter
         'send',
         'is_available',
         'vendor_id',
+        'taxon_id',
         'order',
         'creator_id'
     ];
@@ -82,6 +84,11 @@ class Product extends BaseDomain implements AvailabilityInterface, SortableInter
     public function vendor()
     {
         return $this->belongsTo('App\Modules\Ulises\Vendor\Domain\Vendor', 'vendor_id');
+    }
+
+    public function taxon()
+    {
+        return $this->belongsTo('App\Modules\Ulises\Taxon\Domain\Taxon', 'taxon_id');
     }
 
     public function asComplements() // Is complement of...

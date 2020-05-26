@@ -34,6 +34,7 @@ class Product extends BaseTransformer
             $this->merge(parent::toArray($request)),
             'creator' => new BaseTransformer($this->creator),
             'vendor' => new BaseTransformer($this->vendor),
+            'taxon' => new BaseTransformer($this->taxon),
             'complements' => $complements,
             'as_complement' => $asComplement,
             'details' => $this->details,
