@@ -25,6 +25,7 @@ class ComplementTaxon extends BaseTransformer
         return [
             $this->merge(parent::toArray($request)),
             'creator' => new BaseTransformer($this->creator),
+            'details' => $this->details,
             'order' => $this->order,
         ];
     }

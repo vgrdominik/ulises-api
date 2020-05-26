@@ -26,6 +26,7 @@ class ComplementSummary extends BaseTransformer
             'id' => $this->id,
             'description' => $this->description,
             'short_description' => $this->short_description,
+            'details' => $this->details,
             'creator_id' => $this->creator->id,
             'product_id' => $this->product_id,
             'complement_of_id' => $this->complement_of,

@@ -36,6 +36,7 @@ class Product extends BaseTransformer
             'vendor' => new BaseTransformer($this->vendor),
             'complements' => $complements,
             'as_complement' => $asComplement,
+            'details' => $this->details,
             'barcode' => $this->barcode,
             'sku' => $this->sku,
             'iva' => $this->iva,

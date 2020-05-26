@@ -20,7 +20,7 @@ class CreateTaxonsTable extends Migration
             $table->unsignedBigInteger('parent_taxon_id')->index();
             $table->string('description');
             $table->string('short_description');
-            $table->string('details');
+            $table->text('details');
             $table->string('photo');
             $table->string('order');
             $table->boolean('is_available');

@@ -21,6 +21,7 @@ class CreateComplementsTable extends Migration
             $table->unsignedBigInteger('complement_of_id')->index();
             $table->string('description');
             $table->string('short_description');
+            $table->text('details');
             $table->string('order');
             $table->boolean('is_available');
             $table->boolean('include');

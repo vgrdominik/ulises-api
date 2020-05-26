@@ -25,6 +25,7 @@ class Vendor extends BaseTransformer
         return [
             $this->merge(parent::toArray($request)),
             'creator' => new BaseTransformer($this->creator),
+            'details' => $this->details,
             'nif' => $this->nif,
             'address' => $this->address,
             'postal_code' => $this->postal_code,

@@ -9,6 +9,7 @@ class Vendor extends BaseDomain
         'creator_id' => ['required', 'integer', 'exists:users,id'],
         'description' => ['required', 'string', 'min:4', 'max:255'],
         'short_description' => ['required', 'string', 'max:255'],
+        'details' => ['required', 'string', 'max:2000'],
         'nif' => ['required', 'string', 'max:50'],
         'address' => ['required', 'string', 'max:255'],
         'postal_code' => ['required', 'string', 'max:25'],
@@ -25,6 +26,7 @@ class Vendor extends BaseDomain
     protected $fillable = [
         'description',
         'short_description',
+        'details',
         'nif',
         'address',
         'postal_code',

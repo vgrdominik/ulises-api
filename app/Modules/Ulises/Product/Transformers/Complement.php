@@ -27,6 +27,7 @@ class Complement extends BaseTransformer
             'creator' => new BaseTransformer($this->creator),
             'product' => new BaseTransformer($this->product),
             'complement_of' => new BaseTransformer($this->complementOf),
+            'details' => $this->details,
             'quantity_inventory' => $this->quantity_inventory,
             'retail_price' => $this->retail_price,
             'margin' => $this->margin,

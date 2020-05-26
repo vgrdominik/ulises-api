@@ -27,6 +27,7 @@ class ComplementTaxonSummary extends BaseTransformer
             'description' => $this->description,
             'short_description' => $this->short_description,
             'creator_id' => $this->creator->id,
+            'details' => $this->details,
             'order' => $this->order,
         ];
     }

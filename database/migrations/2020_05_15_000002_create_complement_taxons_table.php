@@ -18,6 +18,7 @@ class CreateComplementTaxonsTable extends Migration
             $table->unsignedBigInteger('creator_id')->index();
             $table->string('description');
             $table->string('short_description');
+            $table->text('details');
             $table->string('order');
             $table->timestamps();
         });

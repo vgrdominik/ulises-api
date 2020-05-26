@@ -18,6 +18,7 @@ class CreateVendorsTable extends Migration
             $table->unsignedBigInteger('creator_id')->index();
             $table->string('description');
             $table->string('short_description');
+            $table->text('details');
             $table->string('nif');
             $table->string('address');
             $table->string('postal_code');

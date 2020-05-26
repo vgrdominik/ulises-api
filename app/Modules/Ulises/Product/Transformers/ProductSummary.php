@@ -38,6 +38,7 @@ class ProductSummary extends BaseTransformer
             'vendor_id' => $this->vendor->id,
             'complements' => $complements,
             'as_complement' => $asComplement,
+            'details' => $this->details,
             'barcode' => $this->barcode,
             'sku' => $this->sku,
             'iva' => $this->iva,
