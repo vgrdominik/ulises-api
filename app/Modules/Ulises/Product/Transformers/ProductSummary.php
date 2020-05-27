@@ -23,11 +23,11 @@ class ProductSummary extends BaseTransformer
     public function toArray($request)
     {
         $complements = [];
-        foreach ($this->complements as $complement) {
+        foreach ($this->complements() as $complement) {
             $complements[] = new ComplementSummary($complement);
         }
         $asComplement = [];
-        foreach ($this->asComplements as $asComplement) {
+        foreach ($this->asComplements() as $asComplement) {
             $asComplement[] = new ComplementSummary($asComplement);
         }
         return [
@@ -49,9 +49,6 @@ class ProductSummary extends BaseTransformer
             'retail_price2' => $this->retail_price2,
             'retail_price3' => $this->retail_price3,
             'retail_price4' => $this->retail_price4,
-            'handling_fee' => $this->handling_fee,
-            'product_cost' => $this->product_cost,
-            'margin' => $this->margin,
             'compulsory_complements' => $this->compulsory_complements,
             'send' => $this->send,
             'is_available' => $this->isAvailable(),

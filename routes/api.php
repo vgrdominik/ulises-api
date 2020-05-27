@@ -25,11 +25,8 @@ Route::namespace('\\App\\Modules\\')->middleware('auth:airlock')->group(function
         Route::resource('event', 'Api');
     });
     Route::namespace('Ulises\\Product\\Infrastructure\\Controller')->group(function () {
-        Route::get('productSummary', 'Api@productSummary');
         Route::resource('product', 'Api');
-        Route::get('complementSummary', 'ApiComplement@complementSummary');
         Route::resource('complement', 'ApiComplement');
-        Route::get('complementTaxonSummary', 'ApiComplementTaxon@complementTaxonSummary');
         Route::resource('complementTaxon', 'ApiComplementTaxon');
     });
     Route::namespace('Ulises\\Channel\\Infrastructure\\Controller')->group(function () {
@@ -43,7 +40,11 @@ Route::namespace('\\App\\Modules\\')->middleware('auth:airlock')->group(function
     });
 });
 
-// Public Om routes
-Route::namespace('\\App\\Modules\\Ulises\\')->group(function () {
-    // Nothing at the moment
+// Public Ulises routes
+Route::namespace('\\App\\Modules\\')->group(function () {
+    Route::namespace('Ulises\\Product\\Infrastructure\\Controller')->group(function () {
+        Route::get('productSummary', 'Api@productSummary');
+        Route::get('complementSummary', 'ApiComplement@complementSummary');
+        Route::get('complementTaxonSummary', 'ApiComplementTaxon@complementTaxonSummary');
+    });
 });

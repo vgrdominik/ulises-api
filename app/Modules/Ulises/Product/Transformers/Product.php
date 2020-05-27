@@ -23,11 +23,11 @@ class Product extends BaseTransformer
     public function toArray($request)
     {
         $complements = [];
-        foreach ($this->complements as $complement) {
+        foreach ($this->complements() as $complement) {
             $complements[] = new ComplementSummary($complement);
         }
         $asComplement = [];
-        foreach ($this->asComplements as $asComplement) {
+        foreach ($this->asComplements() as $asComplement) {
             $asComplement[] = new ComplementSummary($asComplement);
         }
         return [

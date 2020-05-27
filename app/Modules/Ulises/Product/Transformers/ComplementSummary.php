@@ -33,7 +33,6 @@ class ComplementSummary extends BaseTransformer
             'complement_of_id' => $this->complement_of_id,
             'quantity_inventory' => $this->quantity_inventory,
             'retail_price' => $this->retail_price,
-            'margin' => $this->margin,
             'include' => $this->include,
             'unique' => $this->unique,
             'by_default' => $this->by_default,
