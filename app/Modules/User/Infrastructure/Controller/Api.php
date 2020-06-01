@@ -4,6 +4,7 @@
 namespace App\Modules\User\Infrastructure\Controller;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Ulises\Vendor\Domain\Vendor;
 use App\Modules\User\Domain\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\Events\PasswordReset;
@@ -37,7 +38,7 @@ class Api extends Controller
 
         if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
+                'email' => ['Las credenciales son incorrectas.'],
             ]);
         }
 
@@ -71,6 +72,17 @@ class Api extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ])));
+
+        try {
+            $firstVendor = Vendor::first();
+            $firstVendor->description = $data['name'];
+            $firstVendor->short_description = $data['name'];
+            $firstVendor->save();
+        } catch (\Exception $e) {
+            throw ValidationException::withMessages([
+                'name' => ['El usuario se ha registrado, puedes identificarte. Aún así contacta con nosotros ya que no ha sido posible asignar el nombre a tu empresa.'],
+            ]);
+        }
 
         return response()->json('User registered');
     }

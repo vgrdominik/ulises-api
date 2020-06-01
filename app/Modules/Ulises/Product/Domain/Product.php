@@ -8,6 +8,7 @@ use App\Modules\Base\Traits\AvailabilityInterface;
 use App\Modules\Base\Traits\PhotoInterface;
 use App\Modules\Base\Traits\Sortable;
 use App\Modules\Base\Traits\SortableInterface;
+use Illuminate\Validation\ValidationException;
 
 class Product extends BaseDomain implements AvailabilityInterface, SortableInterface, PhotoInterface
 {
@@ -18,25 +19,25 @@ class Product extends BaseDomain implements AvailabilityInterface, SortableInter
     const VALIDATION_COTNEXT = [
         'creator_id' => ['required', 'integer', 'exists:users,id'],
         'vendor_id' => ['required', 'integer', 'exists:vendors,id'],
-        'taxon_id' => ['required', 'integer', 'exists:vendors,id'],
+        'taxon_id' => ['required', 'integer', 'exists:taxons,id'],
         'description' => ['required', 'string', 'min:4', 'max:255'],
         'short_description' => ['required', 'string', 'max:255'],
         'details' => ['required', 'string', 'max:2000'],
-        'barcode' => ['required', 'string', 'max:255'],
-        'sku' => ['required', 'string', 'max:255'],
+        'barcode' => ['nullable', 'string', 'max:255'],
+        'sku' => ['nullable', 'string', 'max:255'],
         'photo' => ['required', 'string', 'max:255'],
         'retail_price' => ['required', 'numeric', 'between:-10000000.999,10000000.999'],
         'retail_price2' => ['required', 'numeric', 'between:-10000000.999,10000000.999'],
         'retail_price3' => ['required', 'numeric', 'between:-10000000.999,10000000.999'],
         'retail_price4' => ['required', 'numeric', 'between:-10000000.999,10000000.999'],
         'iva' => ['required', 'numeric', 'between:0,100'],
-        'handling_fee' => ['required', 'numeric', 'between:-10000000.999,10000000.999'],
-        'product_cost' => ['required', 'numeric', 'between:-10000000.999,10000000.999'],
-        'margin' => ['required', 'numeric', 'between:-10000000.999,10000000.999'],
-        'inventory' => ['required', 'boolean'],
-        'quantity_inventory' => ['required', 'numeric', 'between:-10000000.999,10000000.999'],
-        'compulsory_complements' => ['required', 'boolean'],
-        'send' => ['required', 'boolean'],
+        'handling_fee' => ['nullable', 'numeric', 'between:-10000000.999,10000000.999'],
+        'product_cost' => ['nullable', 'numeric', 'between:-10000000.999,10000000.999'],
+        'margin' => ['nullable', 'numeric', 'between:-10000000.999,10000000.999'],
+        'inventory' => ['nullable', 'boolean'],
+        'quantity_inventory' => ['nullable', 'numeric', 'between:-10000000.999,10000000.999'],
+        'compulsory_complements' => ['nullable', 'boolean'],
+        'send' => ['nullable', 'boolean'],
         'is_available' => ['required', 'boolean'],
         'order' => ['required', 'string', 'max:25'],
     ];
@@ -99,6 +100,26 @@ class Product extends BaseDomain implements AvailabilityInterface, SortableInter
     public function complements() // Has complements
     {
         return $this->hasMany('App\Modules\Ulises\Product\Domain\Complement', 'complement_of_id');
+    }
+
+    // Boot
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Protect from relations.
+        static::deleting(function($telco) {
+            $relationMethods = ['complements', 'asComplements'];
+
+            foreach ($relationMethods as $relationMethod) {
+                if ($telco->$relationMethod()->count() > 0) {
+                    throw ValidationException::withMessages([
+                        $relationMethod => ['El producto contiene ' . $relationMethod . ' por lo que no se puede eliminar.'],
+                    ]);
+                }
+            }
+        });
     }
 
     // GETTERS

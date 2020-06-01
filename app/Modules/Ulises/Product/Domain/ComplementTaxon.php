@@ -4,6 +4,7 @@ namespace App\Modules\Ulises\Product\Domain;
 use App\Modules\Base\Domain\BaseDomain;
 use App\Modules\Base\Traits\Sortable;
 use App\Modules\Base\Traits\SortableInterface;
+use Illuminate\Validation\ValidationException;
 
 class ComplementTaxon extends BaseDomain implements SortableInterface
 {
@@ -37,6 +38,31 @@ class ComplementTaxon extends BaseDomain implements SortableInterface
     public function creator()
     {
         return $this->belongsTo('App\Modules\User\Domain\User', 'creator_id');
+    }
+
+    public function complements() // Has products
+    {
+        return $this->hasMany('App\Modules\Ulises\Product\Domain\Complement', 'complement_taxon_id');
+    }
+
+    // Boot
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Protect from relations.
+        static::deleting(function($telco) {
+            $relationMethods = ['complements'];
+
+            foreach ($relationMethods as $relationMethod) {
+                if ($telco->$relationMethod()->count() > 0) {
+                    throw ValidationException::withMessages([
+                        $relationMethod => ['El complemento contiene ' . $relationMethod . ' por lo que no se puede eliminar.'],
+                    ]);
+                }
+            }
+        });
     }
 
     // GETTERS

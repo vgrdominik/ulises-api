@@ -8,6 +8,7 @@ use App\Modules\Base\Traits\Photo;
 use App\Modules\Base\Traits\PhotoInterface;
 use App\Modules\Base\Traits\Sortable;
 use App\Modules\Base\Traits\SortableInterface;
+use Illuminate\Validation\ValidationException;
 
 class Taxon extends BaseDomain implements AvailabilityInterface, SortableInterface, PhotoInterface
 {
@@ -61,6 +62,31 @@ class Taxon extends BaseDomain implements AvailabilityInterface, SortableInterfa
     public function parentTaxon()
     {
         return $this->belongsTo('App\Modules\Ulises\Taxon\Domain\Taxon', 'parent_taxon_id');
+    }
+
+    public function products() // Has products
+    {
+        return $this->hasMany('App\Modules\Ulises\Product\Domain\Product', 'taxon_id');
+    }
+
+    // Boot
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Protect from relations.
+        static::deleting(function($telco) {
+            $relationMethods = ['products'];
+
+            foreach ($relationMethods as $relationMethod) {
+                if ($telco->$relationMethod()->count() > 0) {
+                    throw ValidationException::withMessages([
+                        $relationMethod => ['La categoría contiene ' . $relationMethod . ' por lo que no se puede eliminar.'],
+                    ]);
+                }
+            }
+        });
     }
 
     // GETTERS

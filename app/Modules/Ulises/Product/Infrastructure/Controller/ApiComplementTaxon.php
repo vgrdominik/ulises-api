@@ -39,6 +39,6 @@ class ApiComplementTaxon extends ResourceController
      */
     public function complementTaxonSummary()
     {
-        return response()->json(ComplementTaxonSummary::collection(($this->getModelClass())::all()));
+        return response()->json(ComplementTaxonSummary::collection(($this->getModelClass())::ordered()->get()));
     }
 }

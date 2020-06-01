@@ -21,6 +21,6 @@ class Api extends ResourceController
      */
     public function productSummary()
     {
-        return response()->json(ProductSummary::collection(($this->getModelClass())::all()));
+        return response()->json(ProductSummary::collection(($this->getModelClass())::available()->ordered()->get()));
     }
 }

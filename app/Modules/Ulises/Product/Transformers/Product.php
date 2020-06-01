@@ -35,6 +35,7 @@ class Product extends BaseTransformer
             'creator' => new BaseTransformer($this->creator),
             'vendor' => new BaseTransformer($this->vendor),
             'taxon' => new BaseTransformer($this->taxon),
+            'taxon_name' => $this->taxon->description,
             'complements' => $complements,
             'as_complement' => $asComplement,
             'details' => $this->details,

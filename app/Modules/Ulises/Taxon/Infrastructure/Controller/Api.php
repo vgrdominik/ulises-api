@@ -21,6 +21,6 @@ class Api extends ResourceController
      */
     public function taxonSummary()
     {
-        return response()->json(TaxonSummary::collection(($this->getModelClass())::all()));
+        return response()->json(TaxonSummary::collection(($this->getModelClass())::available()->ordered()->get()));
     }
 }

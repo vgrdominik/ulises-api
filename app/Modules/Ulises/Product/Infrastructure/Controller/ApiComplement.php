@@ -39,6 +39,6 @@ class ApiComplement extends ResourceController
      */
     public function complementSummary()
     {
-        return response()->json(ComplementSummary::collection(($this->getModelClass())::all()));
+        return response()->json(ComplementSummary::collection(($this->getModelClass())::available()->ordered()->get()));
     }
 }
