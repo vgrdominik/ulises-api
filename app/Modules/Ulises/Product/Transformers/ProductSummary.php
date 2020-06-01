@@ -36,6 +36,7 @@ class ProductSummary extends BaseTransformer
             'short_description' => $this->short_description,
             'creator_id' => $this->creator->id,
             'vendor_id' => $this->vendor->id,
+            'taxon_id' => $this->taxon->id,
             'complements' => $complements,
             'as_complement' => $asComplement,
             'details' => $this->details,

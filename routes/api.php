@@ -42,6 +42,12 @@ Route::namespace('\\App\\Modules\\')->middleware('auth:airlock')->group(function
 
 // Public Ulises routes
 Route::namespace('\\App\\Modules\\')->group(function () {
+    Route::namespace('Ulises\\Vendor\\Infrastructure\\Controller')->group(function () {
+        Route::get('vendorSummary', 'Api@vendorSummary');
+    });
+    Route::namespace('Ulises\\Taxon\\Infrastructure\\Controller')->group(function () {
+        Route::get('taxonSummary', 'Api@taxonSummary');
+    });
     Route::namespace('Ulises\\Product\\Infrastructure\\Controller')->group(function () {
         Route::get('productSummary', 'Api@productSummary');
         Route::get('complementSummary', 'ApiComplement@complementSummary');
