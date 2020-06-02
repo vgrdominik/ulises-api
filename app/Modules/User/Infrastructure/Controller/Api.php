@@ -4,6 +4,7 @@
 namespace App\Modules\User\Infrastructure\Controller;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Ulises\Channel\Domain\Channel;
 use App\Modules\Ulises\Vendor\Domain\Vendor;
 use App\Modules\User\Domain\User;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -12,7 +13,10 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
@@ -59,6 +63,134 @@ class Api extends Controller
         return response()->json('Exit to logout');
     }
 
+    protected function generateRandomPassword()
+    {
+        $string = "";
+        $length = '16';
+        $chars = "abcdefghijklmanopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        $size = strlen($chars);
+        for ($i = 0; $i < $length; $i++) {
+            $string .= $chars[rand(0, $size - 1)];
+        }
+        return $string;
+    }
+
+    protected function createDatabase($user, $urlApi, $username, $password, $dbHost, $command, $dbUser, $dbName, $dbPassword)
+    {
+        if (!$user || !$urlApi || !$username || !$password || !$dbHost || !$command || !$dbUser || !$dbName || !$dbPassword) {
+            throw new \Exception('Cannot get hosting data from config');
+        }
+
+        $args = array('responseType' => 'Json',
+            'hosting' => $dbHost,
+            'ddbbName' => $dbName,
+            'userName' => $dbUser,
+            'userPassword' => $dbPassword,
+            'accessHost' => 'any',
+            'command' => $command,
+        ) ;
+        $args = ( is_array ( $args ) ? http_build_query ( $args, '', '&' ) : $args );
+        $headers = array();
+
+        $handle = curl_init($urlApi);
+        if( $handle === false ) // error starting curl
+        {
+            throw new \Exception('0 - Couldnot start curl');
+        } else {
+            curl_setopt ( $handle, CURLOPT_FOLLOWLOCATION, true );
+            curl_setopt ( $handle, CURLOPT_RETURNTRANSFER, true );
+            curl_setopt ( $handle, CURLOPT_URL, $urlApi );
+
+            curl_setopt( $handle, CURLOPT_USERPWD, $username.':'.$password );
+            curl_setopt( $handle, CURLOPT_HTTPAUTH, CURLAUTH_BASIC );
+
+            curl_setopt( $handle, CURLOPT_TIMEOUT, 60 );
+            curl_setopt( $handle, CURLOPT_CONNECTTIMEOUT, 4); // set higher if you get a "28 - SSL connection timeout" error
+
+            curl_setopt ( $handle, CURLOPT_HEADER, true );
+            curl_setopt ( $handle, CURLOPT_HTTPHEADER, $headers );
+
+            $curlversion = curl_version();
+            curl_setopt ( $handle, CURLOPT_USERAGENT, 'PHP '.phpversion().' + Curl '.$curlversion['version'] );
+            curl_setopt ( $handle, CURLOPT_REFERER, null );
+
+            curl_setopt ( $handle, CURLOPT_SSL_VERIFYPEER, false ); // set false if you get a "60 - SSL certificate problem" error
+
+            curl_setopt ( $handle, CURLOPT_POSTFIELDS, $args );
+            curl_setopt ( $handle, CURLOPT_POST, true );
+
+            $response = curl_exec ( $handle );
+
+            if ($response)
+            {
+                $response = substr( $response,  strpos( $response, "\r\n\r\n" ) + 4 ); // remove http headers
+                // parse response
+
+
+                $responseDecoded = json_decode($response, true);
+                if( $responseDecoded === false )
+                {
+                    throw new \Exception('0 - Invalid json respond');
+                }
+                else
+                {
+                    // parse response
+                    if( false == isset($responseDecoded['responseCode']) )
+                    {
+                        throw new \Exception('0 - Unexpected internal error');
+                    }
+                    else if( $responseDecoded['responseCode'] == 1000  )
+                    {
+                        $data = $responseDecoded['data'];
+                    }
+                    else
+                    {
+                        // normal error
+                        $errors = $responseDecoded['errors'];
+
+                        throw new \Exception('0 - Error logged');
+                    }
+                }
+
+
+            }
+            else // http response code != 200
+            {
+                $error = curl_errno ( $handle ) . ' - ' . curl_error ( $handle );
+
+                throw new \Exception($error);
+            }
+
+            curl_close($handle);
+        }
+    }
+
+    protected function createDefaultStructureToDb($user)
+    {
+        Config::set('database.connections.tenant.host', $user->db_host);
+        Config::set('database.connections.tenant.username', $user->db_user);
+        Config::set('database.connections.tenant.password', $user->db_password);
+        Config::set('database.connections.tenant.database', $user->db_name);
+
+        //If you want to use query builder without having to specify the connection
+        Config::set('database.default', 'tenant');
+        DB::reconnect('tenant');
+
+        Artisan::call('migrate');
+    }
+
+    protected function createDefaultDataToDb($data)
+    {
+        Vendor::create([
+            'description' => $data['name'],
+            'short_description' => $data['name'],
+        ]);
+        Channel::create([
+            'description' => 'Ulises',
+            'short_description' => 'Ulises',
+        ]);
+    }
+
     /**
      * @param Request $request
      * @return JsonResponse
@@ -67,20 +199,39 @@ class Api extends Controller
     {
         $data = $request->validate(User::VALIDATION_COTNEXT);
 
+        $urlApi = env("HOSTING_API", null);
+        $username = env("HOSTING_USER", null);
+        $password = env("HOSTING_PASS", null);
+        $command = env("HOSTING_DATABASE_CREATE_COMMAND", null);
+        $dbHost = env("HOSTING_URL", null);
+        $dbUser = uniqid('ul_');
+        $dbName = $dbUser;
+        $dbPassword = $this->generateRandomPassword();
+
         event(new Registered($user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'db_host' => $dbHost,
+            'db_user' => $dbUser,
+            'db_password' => $dbPassword,
+            'db_name' => $dbName,
         ])));
 
         try {
-            $firstVendor = Vendor::first();
-            $firstVendor->description = $data['name'];
-            $firstVendor->short_description = $data['name'];
-            $firstVendor->save();
+            $this->createDatabase($user, $urlApi, $username, $password, $dbHost, $command, $dbUser, $dbName, $dbPassword);
+            $this->createDefaultStructureToDb($user);
         } catch (\Exception $e) {
             throw ValidationException::withMessages([
-                'name' => ['El usuario se ha registrado, puedes identificarte. Aún así contacta con nosotros ya que no ha sido posible asignar el nombre a tu empresa.'],
+                'name' => ['El usuario se ha registrado. Aún así ha ocurrido un error inesperado, contacta con nosotros para que terminemos tu alta.'],
+            ]);
+        }
+
+        try {
+            $this->createDefaultDataToDb($data);
+        } catch (\Exception $e) {
+            throw ValidationException::withMessages([
+                'name' => ['El usuario se ha registrado. Aún así contacta con nosotros ya que no ha sido posible asignar el nombre a tu empresa.'],
             ]);
         }
 

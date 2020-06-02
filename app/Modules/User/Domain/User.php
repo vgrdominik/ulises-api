@@ -25,7 +25,7 @@ class User extends Authenticatable implements BaseDomainInterface, DescriptiveIn
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'db_host', 'db_user', 'db_password', 'db_name'
     ];
 
     /**

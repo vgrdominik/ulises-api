@@ -6,11 +6,11 @@ use App\Modules\Base\Domain\BaseDomain;
 class Channel extends BaseDomain
 {
     const VALIDATION_COTNEXT = [
-        'creator_id' => ['required', 'integer', 'exists:users,id'],
+        'creator_id' => ['nullable', 'integer', 'exists:users,id'],
         'description' => ['required', 'string', 'min:4', 'max:255'],
         'short_description' => ['required', 'string', 'max:255'],
-        'details' => ['required', 'string', 'min:8', 'max:2000'],
-        'token' => ['required', 'string', 'min:4', 'max:255'],
+        'details' => ['nullable', 'string', 'min:8', 'max:2000'],
+        'token' => ['nullable', 'string', 'min:4', 'max:255'],
     ];
 
     protected $fillable = [

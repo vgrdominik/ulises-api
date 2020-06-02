@@ -6,21 +6,21 @@ use App\Modules\Base\Domain\BaseDomain;
 class Vendor extends BaseDomain
 {
     const VALIDATION_COTNEXT = [
-        'creator_id' => ['required', 'integer', 'exists:users,id'],
+        'creator_id' => ['nullable', 'integer', 'exists:users,id'],
         'description' => ['required', 'string', 'min:4', 'max:255'],
         'short_description' => ['required', 'string', 'max:255'],
-        'details' => ['required', 'string', 'max:2000'],
-        'nif' => ['required', 'string', 'max:50'],
-        'address' => ['required', 'string', 'max:255'],
-        'postal_code' => ['required', 'string', 'max:25'],
-        'city' => ['required', 'string', 'max:50'],
-        'province' => ['required', 'string', 'max:50'],
-        'mobile' => ['required', 'string', 'max:25'],
-        'email' => ['required', 'string', 'max:50'],
-        'password' => ['required', 'string', 'max:255'],
-        'default_rate' => ['required', 'string', 'max:25'],
-        'type' => ['required', 'string', 'max:255'],
-        'token' => ['required', 'string', 'min:4', 'max:255'],
+        'details' => ['nullable', 'string', 'max:2000'],
+        'nif' => ['nullable', 'string', 'max:50'],
+        'address' => ['nullable', 'string', 'max:255'],
+        'postal_code' => ['nullable', 'string', 'max:25'],
+        'city' => ['nullable', 'string', 'max:50'],
+        'province' => ['nullable', 'string', 'max:50'],
+        'mobile' => ['nullable', 'string', 'max:25'],
+        'email' => ['nullable', 'string', 'max:50'],
+        'password' => ['nullable', 'string', 'max:255'],
+        'default_rate' => ['nullable', 'string', 'max:25'],
+        'type' => ['nullable', 'string', 'max:255'],
+        'token' => ['nullable', 'string', 'min:4', 'max:255'],
     ];
 
     protected $fillable = [
