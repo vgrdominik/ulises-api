@@ -20,10 +20,10 @@ class CreateTaxonsTable extends Migration
             $table->unsignedBigInteger('parent_taxon_id')->index()->nullable();
             $table->string('description');
             $table->string('short_description');
-            $table->text('details');
-            $table->string('photo');
-            $table->string('order');
-            $table->boolean('is_available');
+            $table->text('details')->nullable();
+            $table->string('photo')->nullable();
+            $table->string('order')->nullable();
+            $table->boolean('is_available')->nullable();
             $table->timestamps();
         });
     }

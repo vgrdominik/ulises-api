@@ -176,7 +176,7 @@ class Api extends Controller implements CustomerDBInterface
 
     protected function createDefaultDataToDb($data, $dbHost, $dbUser, $dbPassword, $dbName)
     {
-        $user = User::create([
+        User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
@@ -187,14 +187,14 @@ class Api extends Controller implements CustomerDBInterface
         ]);
 
         $defaultVendor = new Vendor([
-            'creator_id' => $user->id,
+            'creator_id' => 1,
             'description' => $data['name'],
             'short_description' => $data['name'],
         ]);
         $defaultVendor->save();
 
         $defaultChannel = new Channel([
-            'creator_id' => $user->id,
+            'creator_id' => 1,
             'description' => 'Ulises',
             'short_description' => 'Ulises',
         ]);

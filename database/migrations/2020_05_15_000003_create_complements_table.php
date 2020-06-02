@@ -21,15 +21,15 @@ class CreateComplementsTable extends Migration
             $table->unsignedBigInteger('complement_of_id')->index();
             $table->string('description');
             $table->string('short_description');
-            $table->text('details');
-            $table->string('order');
-            $table->boolean('is_available');
-            $table->boolean('include');
-            $table->boolean('unique');
-            $table->boolean('by_default');
-            $table->float('quantity_inventory');
-            $table->float('retail_price');
-            $table->float('margin');
+            $table->text('details')->nullable();
+            $table->string('order')->nullable();
+            $table->boolean('is_available')->nullable();
+            $table->boolean('include')->nullable();
+            $table->boolean('unique')->nullable();
+            $table->boolean('by_default')->nullable();
+            $table->float('quantity_inventory')->nullable();
+            $table->float('retail_price')->nullable();
+            $table->float('margin')->nullable();
             $table->timestamps();
         });
     }
