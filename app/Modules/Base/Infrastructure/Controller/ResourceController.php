@@ -4,16 +4,19 @@ namespace App\Modules\Base\Infrastructure\Controller;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Base\Domain\BaseDomain;
+use App\Modules\Base\Traits\CustomerDB;
+use App\Modules\User\Domain\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 abstract class ResourceController extends Controller
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests, CustomerDB;
 
     /**
      * Display a listing of the resource.
@@ -22,6 +25,10 @@ abstract class ResourceController extends Controller
      */
     public function index()
     {
+        /** @var User $user */
+        $user = Auth::user();
+        $this->setToCustomerDB($user);
+
         return response()->json(($this->getTransformerClass())::collection(($this->getModelClass())::orderBy('created_at', 'desc')->get()));
     }
 
@@ -33,6 +40,10 @@ abstract class ResourceController extends Controller
      */
     public function store()
     {
+        /** @var User $user */
+        $user = Auth::user();
+        $this->setToCustomerDB($user);
+
         $modelClass = $this->getModelClass();
         $transformerClass = $this->getTransformerClass();
         /** @var BaseDomain $model */
@@ -57,6 +68,10 @@ abstract class ResourceController extends Controller
      */
     public function show($id)
     {
+        /** @var User $user */
+        $user = Auth::user();
+        $this->setToCustomerDB($user);
+
         $transformerClass = $this->getTransformerClass();
         $model = ($this->getModelClass())::findOrFail($id);
 
@@ -72,6 +87,10 @@ abstract class ResourceController extends Controller
      */
     public function update($id)
     {
+        /** @var User $user */
+        $user = Auth::user();
+        $this->setToCustomerDB($user);
+
         $transformerClass = $this->getTransformerClass();
         /** @var BaseDomain $model */
         $model = ($this->getModelClass())::findOrFail($id);
@@ -94,6 +113,10 @@ abstract class ResourceController extends Controller
      */
     public function destroy($id)
     {
+        /** @var User $user */
+        $user = Auth::user();
+        $this->setToCustomerDB($user);
+
         /** @var BaseDomain $model */
         $model = ($this->getModelClass())::findOrFail($id);
 

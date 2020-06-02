@@ -6,7 +6,7 @@ use App\Modules\Base\Domain\BaseDomain;
 class Vendor extends BaseDomain
 {
     const VALIDATION_COTNEXT = [
-        'creator_id' => ['nullable', 'integer', 'exists:users,id'],
+        'creator_id' => ['required', 'integer', 'exists:users,id'],
         'description' => ['required', 'string', 'min:4', 'max:255'],
         'short_description' => ['required', 'string', 'max:255'],
         'details' => ['nullable', 'string', 'max:2000'],

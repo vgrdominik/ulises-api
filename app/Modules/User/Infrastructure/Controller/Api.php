@@ -4,6 +4,8 @@
 namespace App\Modules\User\Infrastructure\Controller;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Base\Traits\CustomerDB;
+use App\Modules\Base\Traits\CustomerDBInterface;
 use App\Modules\Ulises\Channel\Domain\Channel;
 use App\Modules\Ulises\Vendor\Domain\Vendor;
 use App\Modules\User\Domain\User;
@@ -15,15 +17,15 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
-class Api extends Controller
+class Api extends Controller implements CustomerDBInterface
 {
+    use CustomerDB;
+
     /**
      * @param Request $request
      * @return JsonResponse
@@ -167,28 +169,36 @@ class Api extends Controller
 
     protected function createDefaultStructureToDb($user)
     {
-        Config::set('database.connections.tenant.host', $user->db_host);
-        Config::set('database.connections.tenant.username', $user->db_user);
-        Config::set('database.connections.tenant.password', $user->db_password);
-        Config::set('database.connections.tenant.database', $user->db_name);
-
-        //If you want to use query builder without having to specify the connection
-        Config::set('database.default', 'tenant');
-        DB::reconnect('tenant');
+        $this->setToCustomerDB($user);
 
         Artisan::call('migrate');
     }
 
-    protected function createDefaultDataToDb($data)
+    protected function createDefaultDataToDb($data, $dbHost, $dbUser, $dbPassword, $dbName)
     {
-        Vendor::create([
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'db_host' => $dbHost,
+            'db_user' => $dbUser,
+            'db_password' => $dbPassword,
+            'db_name' => $dbName,
+        ]);
+
+        $defaultVendor = new Vendor([
+            'creator_id' => $user->id,
             'description' => $data['name'],
             'short_description' => $data['name'],
         ]);
-        Channel::create([
+        $defaultVendor->save();
+
+        $defaultChannel = new Channel([
+            'creator_id' => $user->id,
             'description' => 'Ulises',
             'short_description' => 'Ulises',
         ]);
+        $defaultChannel->save();
     }
 
     /**
@@ -228,7 +238,7 @@ class Api extends Controller
         }
 
         try {
-            $this->createDefaultDataToDb($data);
+            $this->createDefaultDataToDb($data, $dbHost, $dbUser, $dbPassword, $dbName);
         } catch (\Exception $e) {
             throw ValidationException::withMessages([
                 'name' => ['El usuario se ha registrado. Aún así contacta con nosotros ya que no ha sido posible asignar el nombre a tu empresa.'],
