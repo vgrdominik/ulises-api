@@ -94,6 +94,14 @@ php artisan migrate
 php artisan config:cache
 ```
 
+Para añadir la redirección ssl en producción:
+
+```
+# ssl
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://ulises-api.miolimpo.org/$1 [R,L]
+```
+
 ## Aprendiendo sobre Ulises
 
 Este proyecto implementa Airlock de Laravel para la autenticación de los usuarios mediante la api. No hace falta hacer ninguna instalación adicional. Se puede encontrar más información en https://laravel.com/docs/master/airlock.
