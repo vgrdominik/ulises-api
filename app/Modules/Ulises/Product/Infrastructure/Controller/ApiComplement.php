@@ -5,6 +5,7 @@ namespace App\Modules\Ulises\Product\Infrastructure\Controller;
 
 use App\Modules\Base\Infrastructure\Controller\ResourceController;
 use App\Modules\Ulises\Product\Transformers\ComplementSummary;
+use App\Modules\User\Domain\User;
 use Illuminate\Http\JsonResponse;
 
 class ApiComplement extends ResourceController
@@ -39,6 +40,10 @@ class ApiComplement extends ResourceController
      */
     public function complementSummary()
     {
+        /** @var User $user */
+        $user = User::findOrFail(request()->get('account_id'));
+        $this->setToCustomerDB($user);
+
         return response()->json(ComplementSummary::collection(($this->getModelClass())::available()->ordered()->get()));
     }
 }
