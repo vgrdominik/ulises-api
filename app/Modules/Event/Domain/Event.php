@@ -12,12 +12,11 @@ class Event extends BaseDomain
         'creator_id' => ['required', 'integer', 'exists:users,id'],
         'destinator_id' => ['required', 'integer', 'exists:users,id'],
         'description' => ['required', 'string', 'min:4', 'max:255'],
-        'short_description' => ['required', 'string', 'max:255'],
         'details' => ['required', 'string', 'min:8', 'max:2000'],
         'reservated_at' => ['required', 'integer'],
     ];
 
-    protected $fillable = ['description', 'short_description', 'details', 'creator_id', 'destinator_id', 'reservated_at'];
+    protected $fillable = ['description', 'details', 'creator_id', 'destinator_id', 'reservated_at'];
 
     /**
      * The attributes that should be cast to native types.

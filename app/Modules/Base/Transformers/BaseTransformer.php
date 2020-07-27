@@ -26,10 +26,8 @@ class BaseTransformer extends JsonResource
         return [
             'created_at' => $this->created_at,
             'description' => $this->readable,
-            'long_description' => $this->longReadable,
             'id' => $this->id,
             'icon' => $this->getIcon(),
-            'short_description' => $this->shortReadable,
             'updated_at' => $this->updated_at,
         ];
     }

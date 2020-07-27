@@ -25,7 +25,6 @@ class ComplementSummary extends BaseTransformer
         return [
             'id' => $this->id,
             'description' => $this->description,
-            'short_description' => $this->short_description,
             'details' => $this->details,
             'creator_id' => $this->creator->id,
             'complement_taxon_id' => $this->complement_taxon_id,

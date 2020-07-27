@@ -25,7 +25,6 @@ class VendorSummary extends BaseTransformer
         return [
             'id' => $this->id,
             'description' => $this->description,
-            'short_description' => $this->short_description,
             'creator_id' => $this->creator->id,
             'details' => $this->details,
             'nif' => $this->nif,

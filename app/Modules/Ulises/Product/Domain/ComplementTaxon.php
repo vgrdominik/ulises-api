@@ -13,14 +13,12 @@ class ComplementTaxon extends BaseDomain implements SortableInterface
     const VALIDATION_COTNEXT = [
         'creator_id' => ['required', 'integer', 'exists:users,id'],
         'description' => ['required', 'string', 'min:4', 'max:255'],
-        'short_description' => ['required', 'string', 'max:255'],
         'details' => ['required', 'string', 'max:2000'],
         'order' => ['required', 'string', 'max:25'],
     ];
 
     protected $fillable = [
         'description',
-        'short_description',
         'details',
         'order',
         'creator_id'

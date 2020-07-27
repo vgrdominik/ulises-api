@@ -18,22 +18,16 @@ class Taxon extends BaseDomain implements AvailabilityInterface, SortableInterfa
 
     const VALIDATION_COTNEXT = [
         'creator_id' => ['required', 'integer', 'exists:users,id'],
-        'description' => ['required', 'string', 'min:4', 'max:255'],
-        'short_description' => ['required', 'string', 'max:255'],
+        'description' => ['required', 'string', 'min:4', 'max:30'],
         'is_available' => ['required', 'boolean'],
-        'details' => ['required', 'string', 'min:8', 'max:2000'],
-        'channel_id' => ['required', 'integer', 'exists:channels,id'],
         'parent_taxon_id' => ['nullable', 'integer', 'exists:taxons,id'],
         'order' => ['required', 'string', 'min:1', 'max:25'],
-        'photo' => ['required', 'string', 'min:4', 'max:255'],
+        'photo' => ['nullable', 'string', 'min:4', 'max:255'],
     ];
 
     protected $fillable = [
         'description',
-        'short_description',
-        'details',
         'is_available',
-        'channel_id',
         'parent_taxon_id',
         'order',
         'photo',
@@ -54,14 +48,14 @@ class Taxon extends BaseDomain implements AvailabilityInterface, SortableInterfa
         return $this->belongsTo('App\Modules\User\Domain\User', 'creator_id');
     }
 
-    public function channel()
-    {
-        return $this->belongsTo('App\Modules\Ulises\Channel\Domain\Channel', 'channel_id');
-    }
-
     public function parentTaxon()
     {
         return $this->belongsTo('App\Modules\Ulises\Taxon\Domain\Taxon', 'parent_taxon_id');
+    }
+
+    public function taxons() // Has taxons
+    {
+        return $this->hasMany('App\Modules\Ulises\Taxon\Domain\Taxon', 'parent_taxon_id');
     }
 
     public function products() // Has products

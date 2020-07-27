@@ -14,7 +14,6 @@ abstract class BaseDomain extends Model implements BaseDomainInterface, Descript
     {
         return [
             'description' => ['required', 'string', 'max:255'],
-            'short_description' => ['required', 'string', 'max:255'],
         ];
     }
 

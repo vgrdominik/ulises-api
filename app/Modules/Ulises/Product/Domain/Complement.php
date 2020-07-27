@@ -18,7 +18,6 @@ class Complement extends BaseDomain implements AvailabilityInterface, SortableIn
         'product_id' => ['required', 'integer', 'exists:products,id'], // Product as complement
         'complement_of_id' => ['required', 'integer', 'exists:products,id'], // Complement of product
         'description' => ['required', 'string', 'min:4', 'max:255'],
-        'short_description' => ['required', 'string', 'max:255'],
         'details' => ['required', 'string', 'max:2000'],
         'retail_price' => ['required', 'numeric', 'between:-10000000.999,10000000.999'],
         'margin' => ['required', 'numeric', 'between:-10000000.999,10000000.999'],
@@ -32,7 +31,6 @@ class Complement extends BaseDomain implements AvailabilityInterface, SortableIn
 
     protected $fillable = [
         'description',
-        'short_description',
         'details',
         'retail_price',
         'margin',

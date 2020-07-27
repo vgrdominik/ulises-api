@@ -24,9 +24,7 @@ class Taxon extends BaseTransformer
     {
         return [
             $this->merge(parent::toArray($request)),
-            'details' => $this->details,
             'creator' => new BaseTransformer($this->creator),
-            'channel' => new BaseTransformer($this->channel),
             'is_available' => $this->isAvailable(),
             'photo' => $this->photo,
             'parent_taxon' => new BaseTransformer($this->parentTaxon),

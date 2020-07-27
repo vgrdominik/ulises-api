@@ -21,7 +21,6 @@ class Product extends BaseDomain implements AvailabilityInterface, SortableInter
         'vendor_id' => ['required', 'integer', 'exists:vendors,id'],
         'taxon_id' => ['required', 'integer', 'exists:taxons,id'],
         'description' => ['required', 'string', 'min:4', 'max:255'],
-        'short_description' => ['required', 'string', 'max:255'],
         'details' => ['required', 'string', 'max:2000'],
         'barcode' => ['nullable', 'string', 'max:255'],
         'sku' => ['nullable', 'string', 'max:255'],
@@ -44,7 +43,6 @@ class Product extends BaseDomain implements AvailabilityInterface, SortableInter
 
     protected $fillable = [
         'description',
-        'short_description',
         'details',
         'barcode',
         'sku',

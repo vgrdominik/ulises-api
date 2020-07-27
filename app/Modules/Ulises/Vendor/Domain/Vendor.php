@@ -8,7 +8,6 @@ class Vendor extends BaseDomain
     const VALIDATION_COTNEXT = [
         'creator_id' => ['required', 'integer', 'exists:users,id'],
         'description' => ['required', 'string', 'min:4', 'max:255'],
-        'short_description' => ['required', 'string', 'max:255'],
         'details' => ['nullable', 'string', 'max:2000'],
         'nif' => ['nullable', 'string', 'max:50'],
         'address' => ['nullable', 'string', 'max:255'],
@@ -25,7 +24,6 @@ class Vendor extends BaseDomain
 
     protected $fillable = [
         'description',
-        'short_description',
         'details',
         'nif',
         'address',

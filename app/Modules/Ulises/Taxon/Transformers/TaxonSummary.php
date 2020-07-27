@@ -25,10 +25,7 @@ class TaxonSummary extends BaseTransformer
         return [
             'id' => $this->id,
             'description' => $this->description,
-            'short_description' => $this->short_description,
-            'details' => $this->details,
             'creator_id' => $this->creator_id,
-            'channel_id' => $this->channel_id,
             'is_available' => $this->isAvailable(),
             'photo' => $this->photo,
             'parent_taxon' => $this->parent_taxon_id,

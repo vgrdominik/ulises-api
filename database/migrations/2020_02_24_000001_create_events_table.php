@@ -17,7 +17,6 @@ class CreateEventsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('creator_id')->index();
             $table->string('description');
-            $table->string('short_description');
             $table->text('details')->nullable();
             $table->timestamp('reservated_at', 0)->nullable();
             $table->timestamps();

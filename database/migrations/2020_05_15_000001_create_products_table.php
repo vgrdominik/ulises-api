@@ -19,7 +19,6 @@ class CreateProductsTable extends Migration
             $table->unsignedBigInteger('vendor_id')->index();
             $table->unsignedBigInteger('taxon_id')->index();
             $table->string('description');
-            $table->string('short_description');
             $table->text('details');
             $table->string('barcode')->nullable();
             $table->string('sku')->nullable();
